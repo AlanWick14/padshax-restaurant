@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "133169003767",
+    "project_id": "padshax-restaurant",
+    "storage_bucket": "padshax-restaurant.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:133169003767:android:21efe68ecbc78fb9ef67f2",
+        "android_client_info": {
+          "package_name": "com.padshax.restaurant"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyARJPt0fASAbvXtJKNIWlmPUMN1sLB5y8Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

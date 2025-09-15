@@ -1,0 +1,29 @@
+[
+{
+"id": 1,
+"name": "Grilled Chicken Bowl",
+"description": "Juicy chicken with herb rice and salad.",
+"price_uzs": 65000,
+"image": "assets/images/meals/sample_1.jpg",
+"category": "Mains",
+"is_available": true
+},
+{
+"id": 2,
+"name": "Caesar Salad",
+"description": "Crisp romaine, parmesan, croutons.",
+"price_uzs": 42000,
+"image": "assets/images/meals/sample_2.jpg",
+"category": "Salads",
+"is_available": true
+},
+{
+"id": 3,
+"name": "Lemonade",
+"description": "Freshly squeezed, chilled.",
+"price_uzs": 18000,
+"image": "assets/images/meals/sample_3.jpg",
+"category": "Drinks",
+"is_available": true
+}
+]
