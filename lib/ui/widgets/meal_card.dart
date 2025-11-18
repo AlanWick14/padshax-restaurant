@@ -1,11 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:padshax_app/logic/image_provider.dart';
 import '../../domain/meal.dart';
-import 'image_any.dart';
 
 class MealCard extends StatefulWidget {
   final Meal meal;
   final VoidCallback onAdd;
-  const MealCard({super.key, required this.meal, required this.onAdd});
+  final VoidCallback? onImageTap;
+  const MealCard({
+    super.key,
+    required this.meal,
+    required this.onAdd,
+    this.onImageTap,
+  });
 
   @override
   State<MealCard> createState() => _MealCardState();
@@ -77,6 +83,7 @@ class _MealCardState extends State<MealCard> with TickerProviderStateMixin {
     final mq = MediaQuery.of(context);
     final w = mq.size.width;
     final isTablet = w >= 600;
+    final provider = resolveMealImageProvider(widget.meal.imagePath);
 
     // Responsive o'lchamlar - landscape uchun optimallashtirilgan
     final imgSize = isTablet ? 85.0 : 75.0; // kichraytirildi
@@ -103,7 +110,10 @@ class _MealCardState extends State<MealCard> with TickerProviderStateMixin {
               clipBehavior: Clip.antiAlias,
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(radius),
-                side: BorderSide(color: _border.withOpacity(0.45), width: 1),
+                side: BorderSide(
+                  color: _border.withValues(alpha: 0.45),
+                  width: 1,
+                ),
               ),
               child: IntrinsicHeight(
                 child: Padding(
@@ -117,9 +127,18 @@ class _MealCardState extends State<MealCard> with TickerProviderStateMixin {
                         child: SizedBox(
                           width: imgSize,
                           height: imgSize,
-                          child: ImageAny(
-                            widget.meal.imagePath,
-                            fit: BoxFit.cover,
+                          child: GestureDetector(
+                            onTap: widget
+                                .onImageTap, // 👈 forward tap to open the viewer
+                            child: Hero(
+                              tag:
+                                  'meal_img_${widget.meal.id}', // 👈 unique, image-only hero
+                              placeholderBuilder: (_, _, child) => child,
+                              child: Image(
+                                image: provider,
+                                fit: BoxFit.cover, // keep as-is for the card
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -157,7 +176,9 @@ class _MealCardState extends State<MealCard> with TickerProviderStateMixin {
                                     style: TextStyle(
                                       fontSize: descSize,
                                       height: 1.2, // kamaytirildi
-                                      color: Colors.white.withOpacity(0.8),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.8,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -194,11 +215,13 @@ class _MealCardState extends State<MealCard> with TickerProviderStateMixin {
                                   style: OutlinedButton.styleFrom(
                                     foregroundColor: Colors.white,
                                     side: BorderSide(
-                                      color: Colors.white.withOpacity(0.4),
+                                      color: Colors.white.withValues(
+                                        alpha: 0.4,
+                                      ),
                                       width: 1,
                                     ),
-                                    backgroundColor: Colors.white.withOpacity(
-                                      _hover ? 0.12 : 0.08,
+                                    backgroundColor: Colors.white.withValues(
+                                      alpha: _hover ? 0.12 : 0.08,
                                     ),
                                     padding: EdgeInsets.symmetric(
                                       horizontal: isTablet

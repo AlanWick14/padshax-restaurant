@@ -22,7 +22,7 @@ class ImageAny extends StatelessWidget {
       return Image.asset(
         path,
         fit: fit,
-        errorBuilder: (_, __, ___) => Image.asset(placeholderAsset, fit: fit),
+        errorBuilder: (_, _, _) => Image.asset(placeholderAsset, fit: fit),
       );
     }
     return FutureBuilder<bool>(
@@ -35,7 +35,7 @@ class ImageAny extends StatelessWidget {
         return Image.file(
           File(path),
           fit: fit,
-          errorBuilder: (_, __, ___) => Image.asset(placeholderAsset, fit: fit),
+          errorBuilder: (_, _, _) => Image.asset(placeholderAsset, fit: fit),
         );
       },
     );

@@ -53,7 +53,7 @@ class CartBottomSheet extends StatelessWidget {
                         : ListView.separated(
                             controller: scrollController,
                             itemCount: state.items.length,
-                            separatorBuilder: (_, __) =>
+                            separatorBuilder: (_, _) =>
                                 const Divider(height: 1),
                             itemBuilder: (context, i) {
                               final it = state.items[i];

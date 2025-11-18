@@ -64,7 +64,7 @@ class SubCategoryBar extends StatelessWidget {
             child: ListView.separated(
               scrollDirection: Axis.horizontal,
               itemCount: subs.length,
-              separatorBuilder: (_, __) => SizedBox(width: isTablet ? 12 : 8),
+              separatorBuilder: (_, _) => SizedBox(width: isTablet ? 12 : 8),
               itemBuilder: (context, i) {
                 final sub = subs[i];
                 final sel = selected == sub.name;
@@ -90,7 +90,7 @@ class SubCategoryBar extends StatelessWidget {
                   side: BorderSide(
                     color: sel
                         ? scheme.primary
-                        : scheme.outline.withOpacity(0.3),
+                        : scheme.outline.withValues(alpha: 0.3),
                     width: sel ? 2 : 1,
                   ),
                   padding: EdgeInsets.symmetric(
@@ -110,8 +110,9 @@ class SubCategoryBar extends StatelessWidget {
                       tooltip: 'Boshqarish',
                       onSelected: (v) async {
                         if (v == 'edit' && onEdit != null) await onEdit!(sub);
-                        if (v == 'delete' && onDelete != null)
+                        if (v == 'delete' && onDelete != null) {
                           await onDelete!(sub);
+                        }
                       },
                       itemBuilder: (_) => const [
                         PopupMenuItem(

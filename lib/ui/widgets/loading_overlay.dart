@@ -15,9 +15,9 @@ class LoadingOverlay {
       context: context,
       barrierLabel: 'Loading',
       barrierDismissible: barrierDismissible,
-      barrierColor: Colors.black.withOpacity(0.35),
+      barrierColor: Colors.black.withValues(alpha: 0.35),
       transitionDuration: const Duration(milliseconds: 200),
-      pageBuilder: (ctx, _, __) {
+      pageBuilder: (ctx, _, _) {
         final theme = Theme.of(ctx);
         final scheme = theme.colorScheme;
         return PopScope(
@@ -39,12 +39,14 @@ class LoadingOverlay {
                     vertical: 18,
                   ),
                   decoration: BoxDecoration(
-                    color: scheme.surface.withOpacity(0.92),
+                    color: scheme.surface.withValues(alpha: 0.92),
                     borderRadius: BorderRadius.circular(20),
-                    border: Border.all(color: scheme.outline.withOpacity(0.2)),
+                    border: Border.all(
+                      color: scheme.outline.withValues(alpha: 0.2),
+                    ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.08),
+                        color: Colors.black.withValues(alpha: 0.08),
                         blurRadius: 24,
                         spreadRadius: 2,
                       ),

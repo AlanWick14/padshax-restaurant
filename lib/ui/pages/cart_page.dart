@@ -68,12 +68,12 @@ class CartPage extends StatelessWidget {
               padding: const EdgeInsets.all(24),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: scheme.primaryContainer.withOpacity(0.3),
+                color: scheme.primaryContainer.withValues(alpha: 0.3),
               ),
               child: Icon(
                 Icons.shopping_cart_outlined,
                 size: isTablet ? 80 : 64,
-                color: scheme.primary.withOpacity(0.6),
+                color: scheme.primary.withValues(alpha: 0.6),
               ),
             ),
             const SizedBox(height: 24),
@@ -91,7 +91,7 @@ class CartPage extends StatelessWidget {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: isTablet ? 18 : 16,
-                color: scheme.onSurface.withOpacity(0.7),
+                color: scheme.onSurface.withValues(alpha: 0.7),
                 height: 1.4,
               ),
             ),
@@ -143,9 +143,9 @@ class CartPage extends StatelessWidget {
         Container(
           width: 320,
           decoration: BoxDecoration(
-            color: scheme.surfaceContainerHighest.withOpacity(0.3),
+            color: scheme.surfaceContainerHighest.withValues(alpha: 0.3),
             border: Border(
-              left: BorderSide(color: scheme.outline.withOpacity(0.2)),
+              left: BorderSide(color: scheme.outline.withValues(alpha: 0.2)),
             ),
           ),
           child: _buildOrderSummary(context, state, scheme, isTablet: true),
@@ -232,10 +232,10 @@ class CartPage extends StatelessWidget {
       decoration: BoxDecoration(
         color: scheme.surface,
         borderRadius: BorderRadius.circular(isTablet ? 16 : 12),
-        border: Border.all(color: scheme.outline.withOpacity(0.1)),
+        border: Border.all(color: scheme.outline.withValues(alpha: 0.1)),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: Colors.black.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -377,7 +377,7 @@ class CartPage extends StatelessWidget {
                     child: Text(
                       '${item.meal.name} x${item.qty}',
                       style: TextStyle(
-                        color: scheme.onSurface.withOpacity(0.8),
+                        color: scheme.onSurface.withValues(alpha: 0.8),
                       ),
                     ),
                   ),
@@ -424,11 +424,7 @@ class CartPage extends StatelessWidget {
           SizedBox(
             width: double.infinity,
             child: FilledButton.icon(
-              onPressed: state.isEmpty
-                  ? null
-                  : () {
-                      // TODO: implement order processing
-                    },
+              onPressed: state.isEmpty ? null : () {},
               icon: const Icon(Icons.receipt_long),
               label: const Text('Buyurtma berish'),
               style: FilledButton.styleFrom(
@@ -461,7 +457,7 @@ class CartPage extends StatelessWidget {
         color: scheme.surface,
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.08),
+            color: Colors.black.withValues(alpha: 0.08),
             blurRadius: 16,
             offset: const Offset(0, -4),
           ),
@@ -478,9 +474,11 @@ class CartPage extends StatelessWidget {
               Container(
                 padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: scheme.surfaceContainerHighest.withOpacity(0.3),
+                  color: scheme.surfaceContainerHighest.withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(12),
-                  border: Border.all(color: scheme.outline.withOpacity(0.1)),
+                  border: Border.all(
+                    color: scheme.outline.withValues(alpha: 0.1),
+                  ),
                 ),
                 child: Column(
                   children: [
@@ -490,7 +488,7 @@ class CartPage extends StatelessWidget {
                           'Jami taomlar: ${state.items.length}',
                           style: TextStyle(
                             fontSize: 16,
-                            color: scheme.onSurface.withOpacity(0.8),
+                            color: scheme.onSurface.withValues(alpha: 0.8),
                           ),
                         ),
                         const Spacer(),
@@ -498,7 +496,7 @@ class CartPage extends StatelessWidget {
                           'Miqdor: ${state.items.fold(0, (sum, item) => sum + item.qty)}',
                           style: TextStyle(
                             fontSize: 16,
-                            color: scheme.onSurface.withOpacity(0.8),
+                            color: scheme.onSurface.withValues(alpha: 0.8),
                           ),
                         ),
                       ],
@@ -541,7 +539,9 @@ class CartPage extends StatelessWidget {
                       style: OutlinedButton.styleFrom(
                         padding: const EdgeInsets.all(16),
                         foregroundColor: scheme.error,
-                        side: BorderSide(color: scheme.error.withOpacity(0.5)),
+                        side: BorderSide(
+                          color: scheme.error.withValues(alpha: 0.5),
+                        ),
                       ),
                     ),
                   ),
@@ -549,9 +549,7 @@ class CartPage extends StatelessWidget {
                   Expanded(
                     flex: 2,
                     child: FilledButton.icon(
-                      onPressed: () {
-                        // TODO: implement order processing
-                      },
+                      onPressed: () {},
                       icon: const Icon(Icons.receipt_long),
                       label: const Text('Buyurtma berish'),
                       style: FilledButton.styleFrom(

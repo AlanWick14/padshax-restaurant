@@ -1,7 +1,6 @@
 // lib/ui/pages/admin_home_page.dart
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:padshax_app/ui/pages/admin_login_page.dart';
 import 'package:padshax_app/ui/widgets/loading_overlay.dart';
 import 'package:padshax_app/ui/widgets/root_selector_bar.dart';
 import 'package:padshax_app/ui/widgets/subcategory_bar.dart';

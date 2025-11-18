@@ -20,7 +20,10 @@ class CartButtonBar extends StatelessWidget {
         decoration: BoxDecoration(
           color: Theme.of(context).colorScheme.surface,
           boxShadow: [
-            BoxShadow(blurRadius: 6, color: Colors.black.withOpacity(0.08)),
+            BoxShadow(
+              blurRadius: 6,
+              color: Colors.black.withValues(alpha: 0.08),
+            ),
           ],
         ),
         child: FilledButton(
@@ -30,10 +33,7 @@ class CartButtonBar extends StatelessWidget {
           ),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text("Savatcha • $totalQty ta"),
-              Text("$totalUzs so'm"),
-            ],
+            children: [Text("Savatcha • $totalQty ta"), Text("$totalUzs so'm")],
           ),
         ),
       ),

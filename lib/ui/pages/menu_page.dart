@@ -4,12 +4,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:padshax_app/data/hive_menu_repository.dart';
 import 'package:padshax_app/data/sync_service.dart';
+import 'package:padshax_app/logic/image_provider.dart';
+import 'package:padshax_app/ui/widgets/image_any.dart';
 import 'package:padshax_app/ui/widgets/loading_overlay.dart';
 import 'package:padshax_app/ui/widgets/root_selector_bar.dart';
 import 'package:padshax_app/ui/widgets/subcategory_bar.dart';
 import 'package:padshax_app/utils/auth_gate.dart';
 
-import '../../config.dart'; // kAdminPin
 import '../../domain/meal.dart';
 import '../../domain/root_category.dart';
 import '../../logic/cart_cubit.dart';
@@ -78,6 +79,25 @@ class _MenuPageState extends State<MenuPage> with TickerProviderStateMixin {
     _searchTextController.dispose();
     _searchFocusNode.dispose();
     super.dispose();
+  }
+
+  void _openMealImageViewer(Meal meal) async {
+    final provider = resolveMealImageProvider(meal.imagePath);
+
+    // 👇 Ensure the big image is ready before transition (prevents flash)
+    await precacheImage(provider, context);
+
+    if (!mounted) return;
+    Navigator.of(context).push(
+      PageRouteBuilder(
+        opaque: false,
+        barrierColor: Colors.black54,
+        pageBuilder: (_, __, ___) =>
+            _MealImageViewer(meal: meal, provider: provider),
+        transitionsBuilder: (_, animation, __, child) =>
+            FadeTransition(opacity: animation, child: child),
+      ),
+    );
   }
 
   void _autoSelectFirstSubcatForRoot() {
@@ -281,8 +301,8 @@ class _MenuPageState extends State<MenuPage> with TickerProviderStateMixin {
               begin: Alignment.topLeft,
               end: Alignment.bottomRight,
               colors: [
-                scheme.primaryContainer.withOpacity(0.3),
-                scheme.secondaryContainer.withOpacity(0.2),
+                scheme.primaryContainer.withValues(alpha: 0.3),
+                scheme.secondaryContainer.withValues(alpha: 0.2),
                 scheme.surface,
               ],
             ),
@@ -295,7 +315,7 @@ class _MenuPageState extends State<MenuPage> with TickerProviderStateMixin {
                 child: Icon(
                   Icons.restaurant_menu,
                   size: isTablet ? 120 : 100,
-                  color: scheme.primary.withOpacity(0.1),
+                  color: scheme.primary.withValues(alpha: 0.1),
                 ),
               ),
             ],
@@ -397,7 +417,7 @@ class _MenuPageState extends State<MenuPage> with TickerProviderStateMixin {
             LoadingOverlay.show(context, message: 'Sinxronlanmoqda…');
             try {
               await context.read<SyncService>().syncFromFirebase();
-              if (!mounted) return;
+              if (!context.mounted) return;
               ScaffoldMessenger.of(context).showSnackBar(
                 const SnackBar(content: Text('Sinxronlash tugadi')),
               );
@@ -452,7 +472,7 @@ class _MenuPageState extends State<MenuPage> with TickerProviderStateMixin {
                   Text(
                     'Menu yuklanmoqda...',
                     style: TextStyle(
-                      color: scheme.onSurface.withOpacity(0.7),
+                      color: scheme.onSurface.withValues(alpha: 0.7),
                       fontSize: isTablet ? 18 : 16,
                     ),
                   ),
@@ -485,12 +505,10 @@ class _MenuPageState extends State<MenuPage> with TickerProviderStateMixin {
             ),
             delegate: SliverChildBuilderDelegate((context, index) {
               final meal = meals[index];
-              return Hero(
-                tag: 'meal_${meal.id}',
-                child: MealCard(
-                  meal: meal,
-                  onAdd: () => _addToCartWithDebouncedSnack(meal),
-                ),
+              return MealCard(
+                meal: meal,
+                onAdd: () => _addToCartWithDebouncedSnack(meal),
+                onImageTap: () => _openMealImageViewer(meal), // 👈 NEW
               );
             }, childCount: meals.length),
           ),
@@ -521,7 +539,7 @@ class _MenuPageState extends State<MenuPage> with TickerProviderStateMixin {
               child: Icon(
                 isSearching ? Icons.search_off : Icons.restaurant_menu_outlined,
                 size: isTablet ? 80 : 64,
-                color: scheme.primary.withOpacity(0.6),
+                color: scheme.primary.withValues(alpha: 0.6),
               ),
             ),
             SizedBox(height: isTablet ? 32 : 24),
@@ -541,11 +559,48 @@ class _MenuPageState extends State<MenuPage> with TickerProviderStateMixin {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: isTablet ? 18 : 16,
-                color: scheme.onSurface.withOpacity(0.7),
+                color: scheme.onSurface.withValues(alpha: 0.7),
                 height: 1.4,
               ),
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _MealImageViewer extends StatelessWidget {
+  const _MealImageViewer({required this.meal, required this.provider});
+  final Meal meal;
+  final ImageProvider provider;
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => Navigator.of(context).pop(),
+      child: Center(
+        child: GestureDetector(
+          onTap: () {}, // absorb to allow pinch/drag
+          child: Hero(
+            tag: 'meal_img_${meal.id}',
+            placeholderBuilder: (_, _, child) => child, // 👈 keep same child
+            child: Material(
+              type: MaterialType.transparency,
+              child: InteractiveViewer(
+                minScale: 0.8,
+                maxScale: 4.0,
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(16),
+                  child: Image(
+                    image: provider, // 👈 same provider as card
+                    fit: BoxFit.contain, // modal view
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
       ),
     );
